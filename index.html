@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UTN FR Pacheco — Diplomatura IoT Práctico con ESP8266 (Expediente)</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --text:#eaf0ff;
+      --muted:#b7c3e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#7cf7c5;
+      --accent2:#7aa7ff;
+      --warn:#ffd36e;
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 700px at 15% 10%, rgba(122,167,255,.18), transparent 55%),
+        radial-gradient(900px 650px at 85% 15%, rgba(124,247,197,.14), transparent 55%),
+        radial-gradient(1100px 700px at 50% 95%, rgba(255,211,110,.10), transparent 60%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+    a{color:var(--accent2); text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    /* Layout */
+    .wrap{max-width:1100px; margin:0 auto; padding:24px}
+    .grid{display:grid; grid-template-columns: 360px 1fr; gap:18px; align-items:start}
+    @media (max-width: 980px){ .grid{grid-template-columns: 1fr} }
+
+    /* Cards */
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .pad{padding:18px}
+    .pad-lg{padding:22px}
+    .sep{height:1px; background:var(--line); margin:14px 0}
+
+    /* Tipografía: títulos gigantes */
+    .kicker{
+      display:inline-flex; gap:8px; align-items:center;
+      font-weight:800; letter-spacing:.08em; text-transform:uppercase;
+      color:var(--accent); font-size:12px;
+      padding:8px 10px; border-radius:999px;
+      border:1px solid rgba(124,247,197,.30);
+      background: rgba(124,247,197,.08);
+    }
+    h1{
+      font-size: clamp(34px, 5vw, 60px);
+      line-height:1.05;
+      margin:14px 0 10px;
+      letter-spacing:-.02em;
+    }
+    .subtitle{
+      font-size: clamp(18px, 2.4vw, 26px);
+      color:var(--muted);
+      margin:0 0 12px;
+    }
+    h2{
+      font-size: clamp(24px, 3.2vw, 38px);
+      margin:18px 0 8px;
+      letter-spacing:-.01em;
+    }
+    h3{
+      font-size: clamp(18px, 2.4vw, 26px);
+      margin:16px 0 8px;
+    }
+    p{margin:10px 0}
+    .muted{color:var(--muted)}
+    .tiny{font-size:13px; color:var(--muted)}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px; border-radius:999px;
+      background: rgba(122,167,255,.10);
+      border:1px solid rgba(122,167,255,.28);
+      font-weight:800;
+      margin:6px 8px 0 0;
+      white-space:nowrap;
+    }
+
+    /* Nav */
+    .nav{position: sticky; top: 18px;}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:-.01em;}
+    .brand .dot{
+      width:10px; height:10px; border-radius:999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 6px rgba(124,247,197,.12);
+    }
+    details{
+      border:1px solid var(--line);
+      border-radius:14px;
+      background: rgba(0,0,0,.12);
+      overflow:hidden;
+    }
+    summary{
+      cursor:pointer; padding:14px 14px; list-style:none; font-weight:900;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    summary::-webkit-details-marker{display:none}
+    .chev{opacity:.7}
+    details[open] .chev{transform:rotate(180deg)}
+    .navlinks{padding:6px 10px 12px}
+    .nav a{
+      display:block; padding:10px 12px; border-radius:12px;
+      color:var(--text); border:1px solid transparent;
+    }
+    .nav a:hover{background: rgba(255,255,255,.04); border-color: var(--line); text-decoration:none;}
+
+    /* Hero */
+    .hero{display:grid; grid-template-columns: 1.2fr .8fr; gap:18px; align-items:center;}
+    @media (max-width: 980px){ .hero{grid-template-columns: 1fr} .nav{position:relative; top:auto;} }
+    .illu{
+      background: radial-gradient(700px 420px at 40% 25%, rgba(124,247,197,.18), transparent 60%),
+                  radial-gradient(600px 420px at 70% 70%, rgba(122,167,255,.18), transparent 60%),
+                  rgba(0,0,0,.18);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      padding:16px;
+      overflow:hidden;
+    }
+    .callout{
+      border:1px solid rgba(255,211,110,.28);
+      background: rgba(255,211,110,.08);
+      border-radius: 16px;
+      padding:14px;
+    }
+    .list{margin:10px 0 0; padding-left:18px}
+    .list li{margin:8px 0}
+
+    /* Tables */
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background: rgba(0,0,0,.10);
+      overflow:hidden;
+    }
+    th, td{
+      padding:12px;
+      vertical-align:top;
+      border-bottom:1px solid var(--line);
+      font-size:14px;
+    }
+    th{background: rgba(255,255,255,.06); font-weight:900; text-align:left;}
+    tr:last-child td{border-bottom:none}
+    .nowrap{white-space:nowrap}
+
+    section{scroll-margin-top:18px; padding:4px 0}
+
+    /* Print: “Guardar como PDF” queda limpio */
+    @media print{
+      body{background:#fff; color:#000}
+      .card{box-shadow:none; background:#fff; border-color:#ddd}
+      a{color:#000; text-decoration:none}
+      .nav{display:none}
+      .subtitle,.muted,.tiny{color:#222}
+      table{border-color:#bbb}
+      th,td{border-color:#ddd}
+      .illu{display:none}
+      .kicker{border-color:#999; color:#000; background:#fff}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="grid">
+      <!-- NAV -->
+      <aside class="nav card">
+        <div class="pad">
+          <div class="brand">
+            <span class="dot"></span>
+            <div>
+              <div style="font-size:14px; font-weight:900;">UTN FR Pacheco</div>
+              <div class="tiny">Documento modelo para expediente</div>
+            </div>
+          </div>
+
+          <div class="sep"></div>
+
+          <details open>
+            <summary>Índice rápido <span class="chev">▾</span></summary>
+            <div class="navlinks">
+              <a href="#caratula">1) Carátula</a>
+              <a href="#indice">2) Índice</a>
+              <a href="#denominacion">3) Denominación</a>
+              <a href="#unidad">4) Unidad responsable</a>
+              <a href="#fundamentacion">5) Fundamentación</a>
+              <a href="#destinatarios">6) Destinatarios</a>
+              <a href="#requisitos">7) Requisitos</a>
+              <a href="#objetivos">8) Objetivos</a>
+              <a href="#duracion">9) Duración y carga horaria</a>
+              <a href="#cupo">10) Cupo</a>
+              <a href="#curricula">11) Organización curricular</a>
+              <a href="#metodologia">12) Metodología</a>
+              <a href="#evaluacion">13) Evaluación</a>
+              <a href="#recursos">14) Recursos</a>
+              <a href="#evidencias">15) Evidencias (YouTube)</a>
+              <a href="#equipo">16) Equipo docente</a>
+              <a href="#anexos">17) Anexos</a>
+            </div>
+          </details>
+
+          <div class="sep"></div>
+
+          <div class="callout">
+            <div style="font-weight:900; margin-bottom:6px;">✨ Idea fuerza</div>
+            <div class="tiny">
+              IA como copiloto: crear, depurar y documentar sin “saber programar desde cero”.<br/>
+              Electrónica en modo rompecabezas: módulos probados, foco en resultados.
+            </div>
+          </div>
+
+          <div class="sep"></div>
+          <div class="tiny">
+            En PC: Imprimir → “Guardar como PDF”.<br/>
+            En celular: usá el índice para saltar por secciones.
+          </div>
+        </div>
+      </aside>
+
+      <!-- CONTENIDO -->
+      <main class="card">
+        <div class="pad-lg">
+          <div class="hero">
+            <div>
+              <div class="kicker">⚙️ Diplomatura • IoT • IA • ESP8266</div>
+              <h1>Robótica, Domótica y Automatización con Inteligencia Artificial</h1>
+              <p class="subtitle">IoT práctico con <b>ESP8266</b>: del navegador al mundo real, con nube y seguridad aplicada.</p>
+
+              <div class="pill">📍 Sede: UTN FR Pacheco (únicamente)</div>
+              <div class="pill">🗓️ Abril → Diciembre (9 meses)</div>
+              <div class="pill">⏱️ 144 horas reloj</div>
+              <div class="pill">👥 Cupo: 15 a 30</div>
+
+              <p class="muted" style="margin-top:14px;">
+                Responsable / Director Académico: <b>Prof. Ing. Victor</b>
+              </p>
+            </div>
+
+            <!-- IMAGEN (SVG) integrada -->
+            <div class="illu" aria-hidden="true">
+              <svg viewBox="0 0 420 320" width="100%" height="auto" role="img">
+                <defs>
+                  <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#7cf7c5" stop-opacity=".9"/>
+                    <stop offset="1" stop-color="#7aa7ff" stop-opacity=".9"/>
+                  </linearGradient>
+                  <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity=".35"/>
+                  </filter>
+                </defs>
+
+                <!-- Cloud -->
+                <g filter="url(#shadow)">
+                  <path d="M140 150c7-26 29-44 56-44 19 0 37 10 47 26 5-2 11-3 17-3 24 0 44 20 44 44 0 2 0 4 0 5 17 3 31 19 31 39 0 23-19 42-42 42H140c-29 0-52-23-52-52 0-26 18-47 42-52z"
+                        fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2"/>
+                  <path d="M142 152c6-24 26-41 52-41 18 0 35 9 44 24 5-2 11-3 17-3 23 0 42 19 42 42 0 1 0 3 0 4 16 3 29 18 29 36 0 21-17 38-38 38H142c-26 0-47-21-47-47 0-23 16-42 38-46z"
+                        fill="url(#g1)" opacity=".20"/>
+                </g>
+
+                <!-- Board -->
+                <g filter="url(#shadow)">
+                  <rect x="62" y="190" rx="18" ry="18" width="296" height="94"
+                        fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.22)" stroke-width="2"/>
+                  <rect x="92" y="212" rx="8" ry="8" width="96" height="50"
+                        fill="rgba(124,247,197,.12)" stroke="rgba(124,247,197,.30)"/>
+                  <rect x="206" y="212" rx="8" ry="8" width="126" height="22"
+                        fill="rgba(122,167,255,.12)" stroke="rgba(122,167,255,.30)"/>
+                  <rect x="206" y="242" rx="8" ry="8" width="126" height="20"
+                        fill="rgba(255,211,110,.12)" stroke="rgba(255,211,110,.30)"/>
+                  <g fill="rgba(255,255,255,.30)">
+                    <circle cx="82" cy="214" r="4"/><circle cx="82" cy="230" r="4"/><circle cx="82" cy="246" r="4"/><circle cx="82" cy="262" r="4"/>
+                    <circle cx="338" cy="214" r="4"/><circle cx="338" cy="230" r="4"/><circle cx="338" cy="246" r="4"/><circle cx="338" cy="262" r="4"/>
+                  </g>
+                </g>
+
+                <!-- Connection -->
+                <path d="M210 190c0-34 0-56 0-92" stroke="rgba(124,247,197,.75)" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="210" cy="98" r="7" fill="rgba(124,247,197,.90)"/>
+                <text x="210" y="86" fill="rgba(255,255,255,.75)" font-size="12" text-anchor="middle">WEB + IA → ESP8266 → NUBE</text>
+              </svg>
+
+              <div class="tiny" style="margin-top:10px;">
+                Ilustración conceptual: interfaz web + IA → dispositivo → nube (estado compartido).
+              </div>
+            </div>
+          </div>
+
+          <div class="sep"></div>
+
+          <section id="caratula">
+            <h2>1) Carátula</h2>
+            <p><b>UNIVERSIDAD TECNOLÓGICA NACIONAL – FACULTAD REGIONAL PACHECO</b></p>
+            <p><b>Proyecto de Diplomatura (Abril–Diciembre)</b></p>
+            <p class="muted">
+              <b>Diplomatura:</b> Robótica, Domótica y Automatización con Inteligencia Artificial (IoT Práctico con ESP8266)<br/>
+              <b>Responsable / Director Académico:</b> Prof. Ing. Victor<br/>
+              <b>Sede de dictado:</b> UTN FR Pacheco (únicamente)<br/>
+              <b>Modalidad:</b> Mixta (2 presenciales/mes + virtual sincrónica)<br/>
+              <b>Carga horaria total:</b> 144 horas reloj<br/>
+              <b>Cupo:</b> mínimo 15 – máximo 30
+            </p>
+          </section>
+
+          <section id="indice">
+            <h2>2) Índice</h2>
+            <table>
+              <thead><tr><th>Sección</th><th>Contenido</th></tr></thead>
+              <tbody>
+                <tr><td class="nowrap"><b>1</b></td><td>Carátula</td></tr>
+                <tr><td class="nowrap"><b>2</b></td><td>Índice</td></tr>
+                <tr><td class="nowrap"><b>3</b></td><td>Denominación de la propuesta</td></tr>
+                <tr><td class="nowrap"><b>4</b></td><td>Unidad académica responsable</td></tr>
+                <tr><td class="nowrap"><b>5</b></td><td>Fundamentación</td></tr>
+                <tr><td class="nowrap"><b>6</b></td><td>Destinatarios</td></tr>
+                <tr><td class="nowrap"><b>7</b></td><td>Requisitos de ingreso</td></tr>
+                <tr><td class="nowrap"><b>8</b></td><td>Objetivos</td></tr>
+                <tr><td class="nowrap"><b>9</b></td><td>Duración, calendario, carga horaria y modalidad</td></tr>
+                <tr><td class="nowrap"><b>10</b></td><td>Cupo</td></tr>
+                <tr><td class="nowrap"><b>11</b></td><td>Organización curricular (9 cursos)</td></tr>
+                <tr><td class="nowrap"><b>12</b></td><td>Metodología de enseñanza–aprendizaje</td></tr>
+                <tr><td class="nowrap"><b>13</b></td><td>Evaluación y acreditación</td></tr>
+                <tr><td class="nowrap"><b>14</b></td><td>Recursos y requerimientos</td></tr>
+                <tr><td class="nowrap"><b>15</b></td><td>Evidencias audiovisuales (YouTube)</td></tr>
+                <tr><td class="nowrap"><b>16</b></td><td>Equipo docente</td></tr>
+                <tr><td class="nowrap"><b>17</b></td><td>Anexos (Kit, Proyecto integrador, Cronograma)</td></tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section id="denominacion">
+            <h2>3) Denominación de la propuesta</h2>
+            <p><b>Diplomatura en Robótica, Domótica y Automatización con Inteligencia Artificial (IoT Práctico con ESP8266)</b></p>
+            <p class="muted"><b>Subtítulo:</b> Del navegador al mundo real: control remoto de dispositivos con IA, Wi-Fi, nube y seguridad.</p>
+          </section>
+
+          <section id="unidad">
+            <h2>4) Unidad académica responsable</h2>
+            <p>Universidad Tecnológica Nacional – Facultad Regional Pacheco.</p>
+            <p class="muted">Área sugerida: Secretaría de Cultura y Extensión Universitaria (o la que corresponda).</p>
+          </section>
+
+          <section id="fundamentacion">
+            <h2>5) Fundamentación</h2>
+            <p>
+              La convergencia entre robótica, domótica, automatización e inteligencia artificial está generando una demanda creciente
+              de perfiles capaces de integrar dispositivos conectados (IoT), automatizar acciones y construir interfaces de control aplicables
+              en hogares, comercios y pymes.
+            </p>
+            <p>
+              La presente diplomatura propone un trayecto eminentemente práctico, con resultados demostrables desde el primer mes. Se incorpora de manera
+              sistemática el uso de Inteligencia Artificial como asistente de construcción (generación de interfaces web, firmware, depuración y documentación),
+              reduciendo barreras de entrada y permitiendo que personas con secundario completo logren desarrollos funcionales sin necesidad de saber programar desde cero.
+            </p>
+            <p class="muted">
+              La formación se organiza en 9 cursos mensuales correlativos (abril a diciembre), cada uno certificable. El recorrido integra progresivamente:
+              creación de interfaces web con IA; control de objetos reales mediante ESP8266 y redes Wi-Fi; servidores web embebidos; integración cloud (Adafruit IO);
+              seguridad mediante proxy (Cloudflare); y cierre con empaquetado y orientación a servicios/monetización (modelo SaaS).
+            </p>
+          </section>
+
+          <section id="destinatarios">
+            <h2>6) Destinatarios</h2>
+            <p>
+              Personas con <b>secundario completo</b> o equivalente. Especialmente recomendado para egresados recientes,
+              estudiantes que interrumpieron carreras técnicas/ingenierías, y perfiles que buscan una formación concreta
+              para inserción laboral rápida.
+            </p>
+          </section>
+
+          <section id="requisitos">
+            <h2>7) Requisitos de ingreso</h2>
+            <ul class="list">
+              <li>Secundario completo (o equivalente).</li>
+              <li>Manejo básico de PC o celular (navegación web, archivos).</li>
+              <li>Compromiso de adquisición del kit de prácticas (ver Anexo I).</li>
+            </ul>
+          </section>
+
+          <section id="objetivos">
+            <h2>8) Objetivos</h2>
+            <h3>Objetivo general</h3>
+            <p>
+              Formar estudiantes capaces de diseñar, implementar y demostrar soluciones básicas de robótica/domótica/automatización
+              controladas por interfaces web creadas con IA, integrando ESP8266, conectividad Wi-Fi, plataformas cloud y medidas de seguridad aplicadas;
+              culminando con un proyecto final orientado a <b>salida laboral inmediata</b>.
+            </p>
+            <h3>Objetivos específicos</h3>
+            <ul class="list">
+              <li>Crear interfaces web funcionales (HTML/CSS/JS) asistidas por IA para control de dispositivos.</li>
+              <li>Implementar control remoto de actuadores y lectura de sensores con ESP8266.</li>
+              <li>Configurar conectividad Wi-Fi en modo estación (red local) y en modo AP (Access Point).</li>
+              <li>Desplegar servidores web embebidos y alojar interfaces dentro del microcontrolador.</li>
+              <li>Integrar soluciones cloud (Adafruit IO) utilizando feeds como estados compartidos (“cajas mágicas”).</li>
+              <li>Aplicar seguridad práctica evitando exposición de credenciales mediante proxy (Cloudflare).</li>
+              <li>Documentar y presentar resultados mediante evidencias audiovisuales y checklist técnico.</li>
+              <li>Diseñar una propuesta básica de servicio/monetización basada en lo construido.</li>
+            </ul>
+          </section>
+
+          <section id="duracion">
+            <h2>9) Duración, calendario, carga horaria y modalidad</h2>
+            <p><b>Duración:</b> abril a diciembre (9 meses).</p>
+            <p><b>Carga horaria:</b> 2 clases semanales de 2 horas (4 h/semana), estimado 16 horas mensuales, total <b>144 horas reloj</b>.</p>
+            <p><b>Modalidad:</b> 2 clases presenciales por mes (taller/laboratorio) + clases restantes virtuales sincrónicas online en vivo.</p>
+            <p class="muted"><b>Sede:</b> dictado exclusivamente en UTN FR Pacheco.</p>
+          </section>
+
+          <section id="cupo">
+            <h2>10) Cupo</h2>
+            <div class="pill">✅ Mínimo: 15</div>
+            <div class="pill">🚀 Máximo: 30</div>
+          </section>
+
+          <section id="curricula">
+            <h2>11) Organización curricular: 9 cursos mensuales (abril–diciembre)</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th class="nowrap">Mes</th>
+                  <th>Curso</th>
+                  <th>Producto final demostrable</th>
+                  <th class="nowrap">Horas/mes</th>
+                  <th class="nowrap">Presencial</th>
+                  <th class="nowrap">Virtual</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><b>Abril</b></td><td>C1 Web con IA</td><td>Web + velador real remoto (base)</td><td>16</td><td>4</td><td>12</td></tr>
+                <tr><td><b>Mayo</b></td><td>C2 Robustez demo</td><td>Control estable + feedback UX</td><td>16</td><td>4</td><td>12</td></tr>
+                <tr><td><b>Junio</b></td><td>C3 Wi-Fi local</td><td>Control LAN por endpoints</td><td>16</td><td>4</td><td>12</td></tr>
+                <tr><td><b>Julio</b></td><td>C4 AP (sin router)</td><td>Red propia + control autónomo</td><td>16</td><td>4</td><td>12</td></tr>
+                <tr><td><b>Agosto</b></td><td>C5 Relé + sensor</td><td>Puerta/relé + sensor ambiente</td><td>16</td><td>4</td><td>12</td></tr>
+                <tr><td><b>Septiembre</b></td><td>C6 Web embebida</td><td>UI dentro del ESP8266</td><td>16</td><td>4</td><td>12</td></tr>
+                <tr><td><b>Octubre</b></td><td>C7 Adafruit IO</td><td>“Cajas mágicas” cloud</td><td>16</td><td>4</td><td>12</td></tr>
+                <tr><td><b>Noviembre</b></td><td>C8 Cloudflare Proxy</td><td>Tokens protegidos + proxy</td><td>16</td><td>4</td><td>12</td></tr>
+                <tr><td><b>Diciembre</b></td><td>C9 Servicio/SaaS</td><td>Demo final + propuesta comercial</td><td>16</td><td>4</td><td>12</td></tr>
+              </tbody>
+            </table>
+
+            <div class="sep"></div>
+
+            <h3>Detalle súper claro (curso por curso)</h3>
+            <ul class="list">
+              <li><b>C1 (Abril):</b> Mi primera web con IA. 3 TPs: botón y estados, velador virtual, velador real remoto.</li>
+              <li><b>C2 (Mayo):</b> Robustez y experiencia de usuario: feedback, estabilidad y demo profesional.</li>
+              <li><b>C3 (Junio):</b> ESP8266 en Wi-Fi local: control en LAN, endpoints y pruebas.</li>
+              <li><b>C4 (Julio):</b> ESP8266 como AP: control sin router, ideal para demos e instalaciones.</li>
+              <li><b>C5 (Agosto):</b> Servidor embebido con <b>puerta/relé + sensor ambiente</b>.</li>
+              <li><b>C6 (Septiembre):</b> Web embebida dentro del dispositivo: “producto cerrado”.</li>
+              <li><b>C7 (Octubre):</b> Adafruit IO: feeds como “cajas mágicas” para IoT global.</li>
+              <li><b>C8 (Noviembre):</b> Seguridad con proxy Cloudflare: credenciales protegidas.</li>
+              <li><b>C9 (Diciembre):</b> Proyecto integrador + propuesta de servicio/monetización (SaaS).</li>
+            </ul>
+          </section>
+
+          <section id="metodologia">
+            <h2>12) Metodología de enseñanza–aprendizaje</h2>
+            <ul class="list">
+              <li>Aprendizaje basado en proyectos: construir → probar → depurar → documentar → presentar.</li>
+              <li>IA como asistente permanente: código, debugging, documentación y presentación.</li>
+              <li>Electrónica tipo rompecabezas: módulos probados, foco en resultados y seguridad.</li>
+              <li>Progresión técnica: local → embebido → cloud → seguridad → servicio.</li>
+            </ul>
+          </section>
+
+          <section id="evaluacion">
+            <h2>13) Evaluación, acreditación y certificación</h2>
+            <h3>Evaluación por curso (evidencia real)</h3>
+            <p>
+              <b>Video de 1 a 3 minutos</b> con: identificación, demostración funcionando y explicación del proceso (incluye cómo se usó IA).
+              Se acompaña con una plantilla breve: enlaces, archivos y checklist técnico.
+            </p>
+
+            <h3>Rúbrica sugerida</h3>
+            <ul class="list">
+              <li>Funcionamiento verificable y replicabilidad: <b>40%</b></li>
+              <li>Claridad de presentación: <b>25%</b></li>
+              <li>Uso adecuado de IA: <b>15%</b></li>
+              <li>Buenas prácticas mínimas (estructura/seguridad): <b>10%</b></li>
+              <li>Mejora extra / creatividad aplicada: <b>10%</b></li>
+            </ul>
+
+            <h3>Certificación</h3>
+            <p class="muted">
+              Certificado por curso mensual aprobado + certificación final de diplomatura con aprobación de los 9 cursos y proyecto integrador.
+            </p>
+          </section>
+
+          <section id="recursos">
+            <h2>14) Recursos y requerimientos</h2>
+            <h3>Del estudiante (kit individual)</h3>
+            <ul class="list">
+              <li>ESP8266 (NodeMCU o Wemos D1 mini)</li>
+              <li>Módulo relé (1 canal)</li>
+              <li>Sensor ambiente (temperatura/humedad; recomendado DHT)</li>
+              <li>Protoboard + jumpers + pulsadores</li>
+              <li>LEDs y resistencias (y/o tira neopixel según estrategia)</li>
+              <li>Cable USB y fuente adecuada</li>
+              <li>Elemento demostrativo “velador” o carga equivalente segura</li>
+            </ul>
+
+            <h3>De la UTN (Sede Pacheco)</h3>
+            <ul class="list">
+              <li>Aula/taller para 2 encuentros presenciales mensuales</li>
+              <li>Wi-Fi, energía y soporte de infraestructura</li>
+              <li>Proyector/pantalla (deseable)</li>
+              <li>Espacio para prácticas controladas</li>
+            </ul>
+          </section>
+
+          <section id="evidencias">
+            <h2>15) Evidencias audiovisuales (YouTube)</h2>
+            <p>
+              Se propone un canal para evidencias y divulgación académica, construyendo portafolio real del estudiante.
+              Modalidad sugerida: canal público (la UTN definirá si será público/no listado/privado según lineamientos institucionales).
+            </p>
+          </section>
+
+          <section id="equipo">
+            <h2>16) Equipo docente propuesto</h2>
+            <div class="pill">👨‍🏫 Responsable / Director: <b>Prof. Ing. Victor</b></div>
+            <div class="pill">🛠️ Colaborador técnico: <b>Nacho</b> (técnico en electrónica)</div>
+          </section>
+
+          <section id="anexos">
+            <h2>17) Anexos</h2>
+
+            <h3>Anexo I — Kit mínimo sugerido</h3>
+            <p class="muted">Ver listado en sección “Recursos y requerimientos”.</p>
+
+            <h3>Anexo II — Proyecto integrador final (Diciembre)</h3>
+            <p>
+              Sistema IoT completo integrando: control web (local y/o cloud), velador real + puerta/relé, lectura de sensor ambiente,
+              operación cloud mediante Adafruit IO, seguridad mediante proxy Cloudflare, video de demo + documentación replicable + propuesta de servicio.
+            </p>
+
+            <h3>Anexo III — Cronograma</h3>
+            <p class="muted">Incluido en la tabla de “Organización curricular”.</p>
+          </section>
+
+          <div class="sep"></div>
+
+          <footer class="tiny">
+            <b>Firma sugerida:</b> Prof. Ing. Victor — Responsable / Director Académico — UTN FR Pacheco.<br/>
+            Este documento está diseñado para leerse fácil en celular y para imprimirse como PDF desde el navegador.
+          </footer>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
